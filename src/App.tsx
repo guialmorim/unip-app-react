@@ -1,38 +1,45 @@
-import * as React from "react"
+import { useState } from 'react';
 import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
+	ChakraProvider,
+	Box,
+	VStack,
+	Grid,
+	theme,
+	Heading,
+} from '@chakra-ui/react';
+import { ColorModeSwitcher } from './components/ColorModeSwitcher';
+import Form from './components/Form';
+import Profile from './components/Profile';
+import { User } from './types';
 
-export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
-    </Box>
-  </ChakraProvider>
-)
+export const App = () => {
+	const [username, setUsername] = useState('');
+	const [user, setUser] = useState<User | null>(null);
+
+	const handleSetUser = (user: User) => setUser(user);
+	const handleSetUsername = (username: string) => setUsername(username);
+
+	return (
+		<ChakraProvider theme={theme}>
+			<Box textAlign="center" fontSize="xl">
+				<Grid minH="100vh" p={3}>
+					<ColorModeSwitcher justifySelf="flex-end" />
+					<VStack spacing={10}>
+						<Heading as="h2" size="xl">
+							GitHub Profile Finder
+						</Heading>
+						<Heading as="h3" size="lg">
+							Encontre perfis do github aqui, basta digitar o username!
+						</Heading>
+						{user && <Profile user={user} />}
+						<Form
+							username={username}
+							handleSetUsername={handleSetUsername}
+							handleSetUser={handleSetUser}
+						/>
+					</VStack>
+				</Grid>
+			</Box>
+		</ChakraProvider>
+	);
+};
